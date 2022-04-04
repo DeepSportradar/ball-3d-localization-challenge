@@ -37,9 +37,7 @@ Please see the challenge page for more details: [https://deepsportradar.github.i
 
 ### Downloading the dataset
 
-The dataset can be found [here](https://www.kaggle.com/datasets/deepsportradar/basketball-instants-dataset). It can be downloaded and unzipped manually in the `deepsport_dataset/` folder of the project.
-
-We will here download it programmatically. First install the kaggle CLI:
+The dataset can be found [here](https://www.kaggle.com/datasets/deepsportradar/basketball-instants-dataset) and can be downloaded and unzipped manually in the `deepsport_dataset/` folder of the project. To do it programmatically, you need the kaggle CLI:
 
 ```bash
 pip install kaggle
