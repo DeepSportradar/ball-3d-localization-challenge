@@ -64,4 +64,4 @@ Given a dataset of ball thumbnails and ground-truth ball diameter in pixels, you
 
 ## timeline
 
-[^1]: [Ball 3D localization from a single calibrated image](!https://arxiv.org/abs/2204.00003)
+[^1]: [Ball 3D localization from a single calibrated image](https://arxiv.org/abs/2204.00003)
