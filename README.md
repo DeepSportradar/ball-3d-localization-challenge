@@ -52,19 +52,19 @@ unzip -qo ./basketball-instants-dataset.zip -d basketball-instants-dataset
 
 ### DeepSport dataset format
 
-The deepsport dataset is stored as a set of files (*.png, *.json) and a database saved in the main json file. The easiest approach to load the data is to install the deepsport toolkit:
+Our dataset follows the DeepSport datasets format, composed of a database stored in a json file and multiple data files. The easiest approach to load the data is to use the deepsport toolkit:
 ```bash
 pip install deepsport-utilities
 ```
 
-The dataset can then be loaded with
+Our dataset can then be loaded with
 ```python
 from deepsport_utilities import import_dataset
 from deepsport_utilities.ds.instants_dataset import InstantsDataset
 
 dataset_config = {
     "download_flags": 3, # corresponds to images and their calib
-    "dataset_folder": "basketball-instants-dataset"  # folder in which .png and .json files are stored
+    "dataset_folder": "basketball-instants-dataset"  # path to dataset files
 }
 
 ds = import_dataset(InstantsDataset, "basketball-instants-dataset/basketball-instants-dataset.json", **dataset_config)
