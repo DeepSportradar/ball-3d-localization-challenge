@@ -29,7 +29,8 @@ This challenge tackles the estimation of ball size on basketball scenes. Using c
 
 Please refer to the challenge webpage for complete rules, timelines and awards: [https://deepsportradar.github.io/challenge.html](https://deepsportradar.github.io/challenge.html).
 
-The goal is to obtain the best estimation of ball size in pixels on the *challenge*-set that will be provided later and for which labels will be kept secrets. The metric used will be the mean absolute error (MAE) between the prediction and the secret ground-truth.
+The goal of this challenge is to obtain the best estimation of ball size in pixels from thumbnails around true ball positions. The metric used will be the mean absolute error (MAE) between the prediction and the ground-truth.
+Contestants will be evaluated on the *challenge*-set that will be provided later and for which labels will be kept secrets.
 
 The competitors must conceive a model that relies only on the provided data for training. In the case of a neural-network based model, initial weights may come from a well-established public methods pret-trained on public data. **This must be clearly stated in the publication/report**.
 
