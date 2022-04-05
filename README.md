@@ -31,9 +31,9 @@ This challenge tackles the estimation of ball size on basketball scenes. Using c
 Please refer to the challenge webpage for complete rules, timelines and awards: [https://deepsportradar.github.io/challenge.html](https://deepsportradar.github.io/challenge.html).
 
 The goal of this challenge is to obtain the best estimation of ball size in pixels from thumbnails around true ball positions. The metric used will be the mean absolute error (MAE) between the prediction and the ground-truth.
-Contestants will be evaluated on the *challenge*-set that will be provided later and for which labels will be kept secrets.
+Contestants will be evaluated on a **challenge-set** that will be provided later and for which labels will be kept secrets.
 
-The competitors must conceive a model that relies only on the provided data for training. In the case of a neural-network based model, initial weights may come from a well-established public methods pret-trained on public data. **This must be clearly stated in the publication/report**.
+The competitors must conceive a model that relies only on the provided data for training. In the case of a neural-network based model, initial weights may come from a well-established public methods pret-trained on public data. This must be clearly stated in the publication/report.
 
 ## Downloading the dataset
 
@@ -57,7 +57,7 @@ Follow the repository instructions to install it and add the folder `basketball-
 
 ### Create the ball dataset
 
-The repository comes with helpers to create the ball dataset from the `basketball-instants-dataset`:
+The `deepsport` repository comes with helpers to create the ball dataset from the `basketball-instants-dataset`:
 ```bash
 python deepsport/scripts/prepare_ball_views_dataset.py --dataset-folder basketball-instants-dataset
 ```
@@ -84,7 +84,13 @@ for key in ds.keys:
 
 ### Dataset splits
 
+The `deepsport` repository uses the split defined in `dataset_utilities.ds.instants_dataset.dataset_splitters.DeepSportDatasetSplitter` which
+1. Uses images from `KS-FR-CAEN`, `KS-FR-LIMOGES` and `KS-FR-ROANNE` arenas for the **testing-set**.
+2. Randomly samples 15% of the remaining images for the **validation-set**
+3. Uses the remaining images for the **training-set**.
 
+The **testing-set** will be used
+The **challenge-set** doesn’t contain any image from the three sets defined above. Therefore
 
 ### Running the baseline
 ```bash
@@ -93,6 +99,20 @@ python -m experimentator configs/ballsize.py --epochs 101 --kwargs "eval_epochs=
 
 ### Test, metrics and submission
 
+```python
+import numpy as np
+from matplotlib import pyplot as plt
+from experimentator import DataCollector
+dc = DataCollector("/home/gva/deepsport/results/ballsize/20220321_170013.798212/history.dcp")
+fig, axes = plt.subplots(2,1)
+for ax, metric in zip(axes, ["loss", "MADE"]):
+    for subset in ["training", "validation"]:
+        label = f"{subset}_{metric}"
+        l = np.array(dc[label, :])
+        w = np.where(l)[0]
+        ax.plot(w, l[w], label=label)
+    ax.legend()
+```
 ## Participating with another codebase
 
 ### Submission format
