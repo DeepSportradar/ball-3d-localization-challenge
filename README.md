@@ -1,7 +1,10 @@
 # CHALLENGE STARTS OFFICIALLY APRIL 6th. Stayed tuned.
 
 
-[![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/JvMQgMkpkm) [![Compete on EvalAI](https://badgen.net/badge/compete%20on/EvalAI/blue)](https://eval.ai/web/challenges/challenge-page/1685/overview) [![Win $1,000.00](https://badgen.net/badge/win/%241%2C000.00/yellow)](http://mmsports.multimedia-computing.de/mmsports2022/challenge.html) [![Kaggle Dataset](https://badgen.net/badge/kaggle/dataset/blue)](https://www.kaggle.com/datasets/deepsportradar/basketball-instants-dataset)
+[![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/JvMQgMkpkm)
+[![Compete on EvalAI](https://badgen.net/badge/compete%20on/EvalAI/blue)](https://eval.ai/web/challenges/challenge-page/1685/overview)
+[![Win $1,000.00](https://badgen.net/badge/win/%241%2C000.00/yellow)](http://mmsports.multimedia-computing.de/mmsports2022/challenge.html)
+[![Kaggle Dataset](https://badgen.net/badge/kaggle/dataset/blue)](https://www.kaggle.com/datasets/deepsportradar/basketball-instants-dataset)
 
 
 # DeepSportRadar Ball 3D localization challenge
@@ -13,6 +16,8 @@ One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/
 - [Downloading the dataset](#downloading-the-dataset)
 - [Using deepsport repository](#using-deepsport-repository)
   - [Create the ball dataset](#create-the-ball-dataset)
+  - [Dataset splits](#dataset-splits)
+  - [Running the baseline](#running-the-baseline)
   - [Test, metrics and submission](#test-metrics-and-submission)
 - [Participating with another codebase](#participating-with-another-codebase)
   - [Submission format](#submission-format)
@@ -58,24 +63,33 @@ python deepsport/scripts/prepare_ball_views_dataset.py --dataset-folder basketba
 ```
 
 The file generated (`basketball-instants-dataset/ball_views.pickle`) is an `mlworkflow.PickledDataset` whose items have the following attributes:
-- `image`: a `numpy.ndarray` RGB image thumbnail centered on the ball. Image shape varies but has a consistant margin of 100 cm around the ball.
+- `image`: a `numpy.ndarray` RGB image thumbnail centered on the ball.
 - `calib`: a `calib3d.Calib` object describing the camera calibration (see [calib3d.Calib](https://ispgroupucl.github.io/calib3d/calib3d/calib.html) for documentation)
 - `ball` : a `deepsport_utilities.ds.instants_dataset.BallAnnotation` object with attributes
-  - `center`: the annotated 3D position of the ball. Use `calib.project_3D_to_2D(ball.center)` to retrieve pixel coordinates
-  - `visible`: A flag telling if ball is visible
+  - `center`: the 3D position of the ball (use `calib.project_3D_to_2D(ball.center)` to retrieve pixel coordinates)
+  - `visible`: a flag telling if ball is visible
 
-
-### Running the baseline
-
+You can visualize this dataset the following way:
+```python
+from mlworkflow import PickledDataset
+from matplotlib import pyplot as plt
+ds = PickledDataset("basketball-instants-dataset/ball_views.pickle")
+for key in ds.keys:
+    item = ds.query_item(key)
+    plt.imshow(item.image)
+    plt.title("ball size: {:.1f}".format(item.calib.compute_length2D(23, item.ball.center)[0]))
+    plt.show()
+    break # avoid looping through all dataset
+```
 
 ### Dataset splits
 
 
-auie
 
-
+### Running the baseline
+```bash
 python -m experimentator configs/ballsize.py --epochs 101 --kwargs "eval_epochs=range(0,101,20)"
-
+```
 
 ### Test, metrics and submission
 
