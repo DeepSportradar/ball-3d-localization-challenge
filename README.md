@@ -6,7 +6,7 @@
 
 # DeepSportRadar Ball 3D localization challenge
 
-One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/mmsports2022/index.html) challenges. An opportunity to publish, as well as a $1000,00 prize. See [this page](http://mmsports.multimedia-computing.de/mmsports2022/challenge.html) for more details.
+One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/mmsports2022/index.html) challenges. An opportunity to publish or win a $1000,00 prize. See [this page](http://mmsports.multimedia-computing.de/mmsports2022/challenge.html) for more details.
 
 **Table of contents**
 - [Challenge rules](#challenge-rules)
@@ -14,7 +14,7 @@ One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/
   - [Downloading the dataset](#downloading-the-dataset)
   - [The DeepSport datasets format](#deepsport-datasets-format)
   - [Dataset splits](#dataset-splits)
-- [Using deepsport repository](#using-deepsport)
+- [Using deepsport repository](#using-deepsport-repository)
   - [Installation](#installation-1)
   - [Baseline](#baseline)
   - [Test, metrics and submission](#test-metrics-and-submission)
@@ -27,11 +27,11 @@ This challenge tackles the estimation of ball size on basketball scenes. Using c
 
 ## Challenge rules
 
-The goal is to obtain the best estimation of ball size in pixels on an evaluation set -- called *challenge*-set -- for which labels will be kept secrets. The metric used will be the mean absolute error (MAE) between the prediction and the secret ground-truth. The *challenge*-set will be provided later.
+Please refer to the challenge webpage for complete rules, timelines and awards: [https://deepsportradar.github.io/challenge.html](https://deepsportradar.github.io/challenge.html).
 
-The competitors must conceive a model that relies only on the provided data for training. In the case of a neural-network based model, initial weights may come from a well-established public methods pret-trained on public data. **This must be clearly stated in the publication/erport**.
+The goal is to obtain the best estimation of ball size in pixels on the *challenge*-set that will be provided later and for which labels will be kept secrets. The metric used will be the mean absolute error (MAE) between the prediction and the secret ground-truth.
 
-Please see the challenge page for more details: [https://deepsportradar.github.io/challenge.html](https://deepsportradar.github.io/challenge.html).
+The competitors must conceive a model that relies only on the provided data for training. In the case of a neural-network based model, initial weights may come from a well-established public methods pret-trained on public data. **This must be clearly stated in the publication/report**.
 
 ## Installation
 
@@ -73,12 +73,18 @@ ds = import_dataset(InstantsDataset, "basketball-instants-dataset/basketball-ins
 ### Dataset splits
 
 
+auie
 
 ## Using deepsport repository
 
-### Installation
+This challenge is based on the public https://github.com/gabriel-vanzandycke/deepsport repository which will serve as a baseline.
+Follow the repository instructions to install it and add `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
 
 ### baseline
+
+python -m experimentator configs/ballsize.py --epochs 101 --kwargs "eval_epochs=range(0,101,20)"
+
+
 ### Test, metrics and submission
 
 ## Participating with another codebase
