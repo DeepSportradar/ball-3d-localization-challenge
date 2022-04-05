@@ -12,8 +12,8 @@ One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/
 - [Challenge rules](#challenge-rules)
 - [Installation](#installation)
   - [Downloading the dataset](#downloading-the-dataset)
-  - [The mlworkflow dataset format](#deepsport-dataset-format)
-  - [About the splits](#about-the-splits)
+  - [The DeepSport datasets format](#deepsport-datasets-format)
+  - [Dataset splits](#dataset-splits)
 - [Using deepsport repository](#using-deepsport)
   - [Installation](#installation-1)
   - [Baseline](#baseline)
@@ -50,7 +50,7 @@ kaggle datasets download deepsportradar/basketball-instants-dataset
 unzip -qo ./basketball-instants-dataset.zip -d basketball-instants-dataset
 ```
 
-### DeepSport dataset format
+### DeepSport datasets format
 
 Our dataset follows the DeepSport datasets format, composed of a database stored in a json file and multiple data files. The easiest approach to load the data is to use the deepsport toolkit:
 ```bash
@@ -70,16 +70,29 @@ dataset_config = {
 ds = import_dataset(InstantsDataset, "basketball-instants-dataset/basketball-instants-dataset.json", **dataset_config)
 ```
 
+### Dataset splits
+
+
+
+## Using deepsport repository
+
+### Installation
+
+### baseline
+### Test, metrics and submission
+
+## Participating with another codebase
+
+### Submission format
+### Computing metrics
+
+## License
+
+
+
 
 ## Challenge
 Given a dataset of ball thumbnails and ground-truth ball diameter in pixels, you are asked to create a model that predicts ball diameter on unseen images of balls.
 
-## Baseline
-
-
-## Competition awards
-
-
-## timeline
 
 [^1]: [Ball 3D localization from a single calibrated image](https://arxiv.org/abs/2204.00003)
