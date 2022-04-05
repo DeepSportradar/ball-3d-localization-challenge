@@ -10,13 +10,9 @@ One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/
 
 **Table of contents**
 - [Challenge rules](#challenge-rules)
-- [Installation](#installation)
-  - [Downloading the dataset](#downloading-the-dataset)
-  - [The DeepSport datasets format](#deepsport-datasets-format)
-  - [Dataset splits](#dataset-splits)
+- [Downloading the dataset](#downloading-the-dataset)
 - [Using deepsport repository](#using-deepsport-repository)
-  - [Installation](#installation-1)
-  - [Baseline](#baseline)
+  - [Create the ball dataset](#create-the-ball-dataset)
   - [Test, metrics and submission](#test-metrics-and-submission)
 - [Participating with another codebase](#participating-with-another-codebase)
   - [Submission format](#submission-format)
@@ -34,9 +30,7 @@ Contestants will be evaluated on the *challenge*-set that will be provided later
 
 The competitors must conceive a model that relies only on the provided data for training. In the case of a neural-network based model, initial weights may come from a well-established public methods pret-trained on public data. **This must be clearly stated in the publication/report**.
 
-## Installation
-
-### Downloading the dataset
+## Downloading the dataset
 
 The dataset can be found [here](https://www.kaggle.com/datasets/deepsportradar/basketball-instants-dataset) and can be downloaded and unzipped manually in the `basketball-instants-dataset/` folder of the project. To do it programmatically, you need the kaggle CLI:
 
@@ -51,37 +45,34 @@ kaggle datasets download deepsportradar/basketball-instants-dataset
 unzip -qo ./basketball-instants-dataset.zip -d basketball-instants-dataset
 ```
 
-### DeepSport datasets format
+## Using deepsport repository
 
-Our dataset follows the DeepSport datasets format, composed of a database stored in a json file and multiple data files. The easiest approach to load the data is to use the deepsport toolkit:
+This challenge is based on the public https://github.com/gabriel-vanzandycke/deepsport repository which will serve as a baseline.
+Follow the repository instructions to install it and add the folder `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
+
+### Create the ball dataset
+
+The repository comes with helpers to create the ball dataset from the `basketball-instants-dataset`:
 ```bash
-pip install deepsport-utilities
+python deepsport/scripts/prepare_ball_views_dataset.py --dataset-folder basketball-instants-dataset
 ```
 
-Our dataset can then be loaded with
-```python
-from deepsport_utilities import import_dataset
-from deepsport_utilities.ds.instants_dataset import InstantsDataset
+The file generated (`basketball-instants-dataset/ball_views.pickle`) is an `mlworkflow.PickledDataset` whose items have the following attributes:
+- `image`: a `numpy.ndarray` RGB image thumbnail centered on the ball. Image shape varies but has a consistant margin of 100 cm around the ball.
+- `calib`: a `calib3d.Calib` object describing the camera calibration (see [calib3d.Calib](https://ispgroupucl.github.io/calib3d/calib3d/calib.html) for documentation)
+- `ball` : a `deepsport_utilities.ds.instants_dataset.BallAnnotation` object with attributes
+  - `center`: the annotated 3D position of the ball. Use `calib.project_3D_to_2D(ball.center)` to retrieve pixel coordinates
+  - `visible`: A flag telling if ball is visible
 
-dataset_config = {
-    "download_flags": 3, # corresponds to images and their calib
-    "dataset_folder": "basketball-instants-dataset"  # path to dataset files
-}
 
-ds = import_dataset(InstantsDataset, "basketball-instants-dataset/basketball-instants-dataset.json", **dataset_config)
-```
+### Running the baseline
+
 
 ### Dataset splits
 
 
 auie
 
-## Using deepsport repository
-
-This challenge is based on the public https://github.com/gabriel-vanzandycke/deepsport repository which will serve as a baseline.
-Follow the repository instructions to install it and add `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
-
-### baseline
 
 python -m experimentator configs/ballsize.py --epochs 101 --kwargs "eval_epochs=range(0,101,20)"
 
