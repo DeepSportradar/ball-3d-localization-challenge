@@ -53,7 +53,7 @@ unzip -qo ./basketball-instants-dataset.zip -d basketball-instants-dataset
 ## Using deepsport repository
 
 This challenge is based on the public https://github.com/gabriel-vanzandycke/deepsport repository which will serve as a baseline.
-Follow the repository instructions to install it and add the folder `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
+Follow the `deepsport` repository installation instructions and add the folder `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
 
 ### Create the ball dataset
 
@@ -64,8 +64,8 @@ python deepsport/scripts/prepare_ball_views_dataset.py --dataset-folder basketba
 
 The file generated (`basketball-instants-dataset/ball_views.pickle`) is an `mlworkflow.PickledDataset` whose items have the following attributes:
 - `image`: a `numpy.ndarray` RGB image thumbnail centered on the ball.
-- `calib`: a `calib3d.Calib` object describing the camera calibration (see [calib3d.Calib](https://ispgroupucl.github.io/calib3d/calib3d/calib.html) for documentation)
-- `ball` : a `deepsport_utilities.ds.instants_dataset.BallAnnotation` object with attributes
+- `calib`: a `calib3d.Calib` object describing the camera calibration (see [calib3d.Calib documentation](https://ispgroupucl.github.io/calib3d/calib3d/calib.html))
+- `ball` : a `deepsport_utilities.ds.instants_dataset.BallAnnotation` object with attributes:
   - `center`: the 3D position of the ball (use `calib.project_3D_to_2D(ball.center)` to retrieve pixel coordinates)
   - `visible`: a flag telling if ball is visible
 
@@ -84,20 +84,19 @@ for key in ds.keys:
 
 ### Dataset splits
 
-The `deepsport` repository uses the split defined in `dataset_utilities.ds.instants_dataset.dataset_splitters.DeepSportDatasetSplitter` which
+The `deepsport` repository uses the split defined by `dataset_utilities.ds.instants_dataset.dataset_splitters.DeepSportDatasetSplitter` which
 1. Uses images from `KS-FR-CAEN`, `KS-FR-LIMOGES` and `KS-FR-ROANNE` arenas for the **testing-set**.
 2. Randomly samples 15% of the remaining images for the **validation-set**
 3. Uses the remaining images for the **training-set**.
 
-The **testing-set** will be used
+The **testing-set** should be used to rank your perfomence on the  evaluate your method on a public evaluation set.
 The **challenge-set** doesn’t contain any image from the three sets defined above. Therefore
 
 ### Running the baseline
 ```bash
 python -m experimentator configs/ballsize.py --epochs 101 --kwargs "eval_epochs=range(0,101,20)"
 ```
-
-### Test, metrics and submission
+You can vizualize the metrics the following way:
 
 ```python
 import numpy as np
@@ -113,6 +112,9 @@ for ax, metric in zip(axes, ["loss", "MADE"]):
         ax.plot(w, l[w], label=label)
     ax.legend()
 ```
+
+### Test, metrics and submission
+
 ## Participating with another codebase
 
 ### Submission format
