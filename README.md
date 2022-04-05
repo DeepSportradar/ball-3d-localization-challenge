@@ -12,7 +12,7 @@ One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/
 - [Challenge rules](#challenge-rules)
 - [Installation](#installation)
   - [Downloading the dataset](#downloading-the-dataset)
-  - [The mlworkflow dataset format](#mlworkflow-dataset-format)
+  - [The mlworkflow dataset format](#deepsport-dataset-format)
   - [About the splits](#about-the-splits)
 - [Using deepsport repository](#using-deepsport)
   - [Installation](#installation-1)
@@ -37,17 +37,37 @@ Please see the challenge page for more details: [https://deepsportradar.github.i
 
 ### Downloading the dataset
 
-The dataset can be found [here](https://www.kaggle.com/datasets/deepsportradar/basketball-instants-dataset) and can be downloaded and unzipped manually in the `deepsport_dataset/` folder of the project. To do it programmatically, you need the kaggle CLI:
+The dataset can be found [here](https://www.kaggle.com/datasets/deepsportradar/basketball-instants-dataset) and can be downloaded and unzipped manually in the `basketball-instants-dataset/` folder of the project. To do it programmatically, you need the kaggle CLI:
 
 ```bash
 pip install kaggle
 ```
 
-Go to your Kaggle Account settings page and click on `Create new API Token` to download the file to be saved as `~/.kaggle/kaggle.json` for authentication. Finally download and unzip the dataset using kaggle CLI:
+Go to your Kaggle Account settings page and click on `Create new API Token` to download the file to be saved as `~/.kaggle/kaggle.json` for authentication. Finally download and unzip the dataset with:
 
 ```bash
 kaggle datasets download deepsportradar/basketball-instants-dataset
-unzip -qo ./basketball-instants-dataset.zip -d deepsport_dataset
+unzip -qo ./basketball-instants-dataset.zip -d basketball-instants-dataset
+```
+
+### DeepSport dataset format
+
+The deepsport dataset is stored as a set of files (*.png, *.json) and a database saved in the main json file. The easiest approach to load the data is to install the deepsport toolkit:
+```bash
+pip install deepsport-utilities
+```
+
+The dataset can then be loaded with
+```python
+from deepsport_utilities import import_dataset
+from deepsport_utilities.ds.instants_dataset import InstantsDataset
+
+dataset_config = {
+    "download_flags": 3, # corresponds to images and their calib
+    "dataset_folder": "basketball-instants-dataset"  # folder in which .png and .json files are stored
+}
+
+ds = import_dataset(InstantsDataset, "basketball-instants-dataset/basketball-instants-dataset.json", **dataset_config)
 ```
 
 
