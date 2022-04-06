@@ -64,7 +64,7 @@ python deepsport/scripts/prepare_ball_views_dataset.py --dataset-folder basketba
 
 The file generated (`basketball-instants-dataset/ball_views.pickle`) is an `mlworkflow.PickledDataset` whose items have the following attributes:
 - `image`: a `numpy.ndarray` RGB image thumbnail centered on the ball.
-- `calib`: a [`Calib`](https://ispgroupucl.github.io/calib3d/calib3d/calib.html#implementation) object describing the calibration data associated to `image` using the [Keemotion convention](https://gitlab.com/deepsport/deepsport_utilities/-/blob/main/calibration.md#working-with-calibrated-images-captured-by-the-keemotion-system).
+- `calib`: a [`calib3d.Calib`](https://ispgroupucl.github.io/calib3d/calib3d/calib.html#implementation) object describing the calibration data associated to `image` using the [Keemotion convention](https://gitlab.com/deepsport/deepsport_utilities/-/blob/main/calibration.md#working-with-calibrated-images-captured-by-the-keemotion-system).
 - `ball` : a [`BallAnnotation`](https://gitlab.com/deepsport/deepsport_utilities/-/blob/main/deepsport_utilities/ds/instants_dataset/instants_dataset.py#L264) object with attributes:
   - `center`: the ball 3D position as a [`calib3d.Point3D`](https://ispgroupucl.github.io/calib3d/calib3d/points.html) object (use `calib.project_3D_to_2D(ball.center)` to retrieve pixel coordinates).
   - `visible`: a flag telling if ball is visible.
@@ -90,9 +90,12 @@ The `deepsport` repository uses the split defined by [`DeepSportDatasetSplitter`
 3. Uses the remaining images for the **training-set**.
 
 The **testing-set** should be used to evaluate your method, both on the public EvalAI leaderboard that provides the temporary ranking, and when communicating about your method.
-The **challenge-set** doesn’t contain any image from the three sets defined above. You are free to use them all to build the model that 
+
+The **challenge-set** will be shared later, without the labels, and will be used for the official ranking. You are free to use the three sets defined above to build the final model on which your method will be evaluated.
 
 ### Running the baseline
+
+With the dataset ready, you are ready to train the baseline. The `deepsport` repository uses 
 ```bash
 python -m experimentator configs/ballsize.py --epochs 101 --kwargs "eval_epochs=range(0,101,20)"
 ```
