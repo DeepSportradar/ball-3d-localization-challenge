@@ -9,7 +9,7 @@
 
 # DeepSportRadar Ball 3D localization challenge
 
-One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/mmsports2022/index.html) challenges. An opportunity to publish or win a $1000,00 prize. See [this page](http://mmsports.multimedia-computing.de/mmsports2022/challenge.html) for more details.
+One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/mmsports2022/index.html) challenges. An opportunity to publish or win a $1000,00 prize by competing on [EvalAI](https://eval.ai/web/challenges/challenge-page/1688/overview). See [this page](http://mmsports.multimedia-computing.de/mmsports2022/challenge.html) for more details.
 
 **Table of contents**
 - [Challenge rules](#challenge-rules)
