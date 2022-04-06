@@ -52,10 +52,10 @@ unzip -qo ./basketball-instants-dataset.zip -d basketball-instants-dataset
 
 The `basketball-instants-dataset` consists in raw images captured by the Keemotion system. For this challenge, we will only use thumbnails around the balls.
 
-## Using deepsport repository
+## Using deepsport baseline
 
 The public https://github.com/gabriel-vanzandycke/deepsport repository provides a baseline for this challenge.
-Follow the `deepsport` repository installation instructions and add the folder `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
+Follow its installation instructions and add the folder `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
 
 ### Dataset preprocessing
 
