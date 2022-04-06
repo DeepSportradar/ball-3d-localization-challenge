@@ -96,12 +96,12 @@ The **challenge-set** will be shared later, without the labels, and will be used
 ### Running the baseline
 
 With the dataset ready, you can train the baseline proposed in the `deepsport` repository.
-The configuration file `configs/ballsize.py` defines a model and parameters to train it with our dataset, as well as the necessary callbacks to compute the metrics.
+The configuration file `configs/ballsize.py` defines a model and parameters to train it with our dataset, as well as the necessary callbacks to compute the metrics. You can launch the model training by running:
 ```bash
 python -m experimentator configs/ballsize.py --epochs 101 --kwargs "eval_epochs=range(0,101,20)"
 ```
 
-The metrics are stored on the `RESULT_FOLDER` defined in your environment `.env` file. You can vizualize the training process the following way:
+You can vizualize the training process the following way:
 
 ```python
 import dotenv
