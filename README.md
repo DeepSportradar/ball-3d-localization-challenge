@@ -50,55 +50,24 @@ kaggle datasets download deepsportradar/basketball-instants-dataset
 unzip -qo ./basketball-instants-dataset.zip -d basketball-instants-dataset
 ```
 
-This `basketball-instants-dataset` consists in raw images captured by the Keemotion system. For this challenge, we will use only a very small portion of it.
+The `basketball-instants-dataset` consists in raw images captured by the Keemotion system. For this challenge, we will only use thumbnails around the balls.
 
 ## Using deepsport repository
 
-This challenge is based on the public https://github.com/gabriel-vanzandycke/deepsport repository which provides the script to generate the ball dataset and a baseline for this challenge.
+The public https://github.com/gabriel-vanzandycke/deepsport repository provides a baseline for this challenge.
 Follow the `deepsport` repository installation instructions and add the folder `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
 
-### Create the ball dataset
+### Dataset preprocessing
 
-The `deepsport` repository comes with helpers to create the ball dataset from the `basketball-instants-dataset`:
+The basline uses a pre-processed dataset built from the `basketball-instants-dataset` with the following script:
 ```bash
 python deepsport/scripts/prepare_ball_views_dataset.py --dataset-folder basketball-instants-dataset
 ```
 
-The file generated (`basketball-instants-dataset/ball_views.pickle`) is an `mlworkflow.PickledDataset` whose items have the following attributes:
-- `image`: a `numpy.ndarray` RGB image thumbnail centered on the ball.
-- `calib`: a [`calib3d.Calib`](https://ispgroupucl.github.io/calib3d/calib3d/calib.html#implementation) object describing the calibration data associated to `image` using the [Keemotion convention](https://gitlab.com/deepsport/deepsport_utilities/-/blob/main/calibration.md#working-with-calibrated-images-captured-by-the-keemotion-system).
-- `ball` : a [`BallAnnotation`](https://gitlab.com/deepsport/deepsport_utilities/-/blob/main/deepsport_utilities/ds/instants_dataset/instants_dataset.py#L264) object with attributes:
-  - `center`: the ball 3D position as a [`calib3d.Point3D`](https://ispgroupucl.github.io/calib3d/calib3d/points.html) object (use `calib.project_3D_to_2D(ball.center)` to retrieve pixel coordinates).
-  - `visible`: a flag telling if ball is visible.
+### Training the baseline
 
-You can visualize this dataset the following way:
-```python
-from mlworkflow import PickledDataset
-from matplotlib import pyplot as plt
-ds = PickledDataset("basketball-instants-dataset/ball_views.pickle")
-for key in ds.keys:
-    item = ds.query_item(key)
-    plt.imshow(item.image)
-    plt.title("ball size: {:.1f}".format(item.calib.compute_length2D(23, item.ball.center)[0]))
-    plt.show()
-    break # avoid looping through all dataset
-```
-
-### Dataset splits
-
-The `deepsport` repository uses the split defined by [`DeepSportDatasetSplitter`](https://gitlab.com/deepsport/deepsport_utilities/-/blob/main/deepsport_utilities/ds/instants_dataset/dataset_splitters.py#L6) which
-1. Uses images from `KS-FR-CAEN`, `KS-FR-LIMOGES` and `KS-FR-ROANNE` arenas for the **testing-set**.
-2. Randomly samples 15% of the remaining images for the **validation-set**
-3. Uses the remaining images for the **training-set**.
-
-The **testing-set** should be used to evaluate your model, both on the public EvalAI leaderboard that provides the temporary ranking, and when communicating about your method.
-
-The **challenge-set** will be shared later, without the labels, and will be used for the official ranking. You are free to use the three sets defined above to build the final model on which your method will be evaluated in the EvalAI submission.
-
-### Running the baseline
-
-With the dataset ready, you can train the baseline proposed in the `deepsport` repository.
-The configuration file `configs/ballsize.py` defines a model and parameters to train it with our dataset, as well as the necessary callbacks to compute the metrics. You can launch the model training by running:
+With the dataset ready, you can train the baseline.
+The configuration file `configs/ballsize.py` defines a model and parameters to train it, as well as the necessary callbacks to compute the metrics. You can launch the model training by running:
 ```bash
 python -m experimentator configs/ballsize.py --epochs 101 --kwargs "eval_epochs=range(0,101,20)"
 ```
@@ -122,7 +91,28 @@ for ax, metric in zip(axes, ["loss", "MADE"]):
     ax.legend()
 ```
 
+### Inferrence
+
+Lorem ipsum
+
+## Participating with another codebase
+
+### Dataset splits
+
+The `deepsport` repository uses the split defined by [`DeepSportDatasetSplitter`](https://gitlab.com/deepsport/deepsport_utilities/-/blob/main/deepsport_utilities/ds/instants_dataset/dataset_splitters.py#L6) which
+1. Uses images from `KS-FR-CAEN`, `KS-FR-LIMOGES` and `KS-FR-ROANNE` arenas for the **testing-set**.
+2. Randomly samples 15% of the remaining images for the **validation-set**
+3. Uses the remaining images for the **training-set**.
+
+The **testing-set** should be used to evaluate your model, both on the public EvalAI leaderboard that provides the temporary ranking, and when communicating about your method.
+
+The **challenge-set** will be shared later, without the labels, and will be used for the official ranking. You are free to use the three sets defined above to build the final model on which your method will be evaluated in the EvalAI submission.
+
+
+
 ### Test, metrics and submission
+
+A script to generate the **testing-set** is provided in this repository:
 
 ## Participating with another codebase
 
