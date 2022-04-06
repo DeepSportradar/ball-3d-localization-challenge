@@ -89,23 +89,27 @@ The `deepsport` repository uses the split defined by [`DeepSportDatasetSplitter`
 2. Randomly samples 15% of the remaining images for the **validation-set**
 3. Uses the remaining images for the **training-set**.
 
-The **testing-set** should be used to evaluate your method, both on the public EvalAI leaderboard that provides the temporary ranking, and when communicating about your method.
+The **testing-set** should be used to evaluate your model, both on the public EvalAI leaderboard that provides the temporary ranking, and when communicating about your method.
 
-The **challenge-set** will be shared later, without the labels, and will be used for the official ranking. You are free to use the three sets defined above to build the final model on which your method will be evaluated.
+The **challenge-set** will be shared later, without the labels, and will be used for the official ranking. You are free to use the three sets defined above to build the final model on which your method will be evaluated in the EvalAI submission.
 
 ### Running the baseline
 
-With the dataset ready, you are ready to train the baseline. The `deepsport` repository uses 
+With the dataset ready, you can train the baseline proposed in the `deepsport` repository.
+The configuration file `configs/ballsize.py` defines a model and parameters to train it with our dataset, as well as the necessary callbacks to compute the metrics.
 ```bash
 python -m experimentator configs/ballsize.py --epochs 101 --kwargs "eval_epochs=range(0,101,20)"
 ```
-You can vizualize the metrics the following way:
+
+The metrics are stored on the `RESULT_FOLDER` defined in your environment `.env` file. You can vizualize the training process the following way:
 
 ```python
+import dotenv
+dotenv.load_dotenv()
 import numpy as np
 from matplotlib import pyplot as plt
 from experimentator import DataCollector
-dc = DataCollector("/home/gva/deepsport/results/ballsize/20220321_170013.798212/history.dcp")
+dc = DataCollector("{os.environ['RESULTS_FOLDER']}/ballsize/latest/history.dcp")
 fig, axes = plt.subplots(2,1)
 for ax, metric in zip(axes, ["loss", "MADE"]):
     for subset in ["training", "validation"]:
