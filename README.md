@@ -50,9 +50,11 @@ kaggle datasets download deepsportradar/basketball-instants-dataset
 unzip -qo ./basketball-instants-dataset.zip -d basketball-instants-dataset
 ```
 
+This `basketball-instants-dataset` consists in raw images captured by the Keemotion system. For this challenge, we will use only a very small portion of it.
+
 ## Using deepsport repository
 
-This challenge is based on the public https://github.com/gabriel-vanzandycke/deepsport repository which will serve as a baseline.
+This challenge is based on the public https://github.com/gabriel-vanzandycke/deepsport repository which provides the script to generate the ball dataset and a baseline for this challenge.
 Follow the `deepsport` repository installation instructions and add the folder `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
 
 ### Create the ball dataset
