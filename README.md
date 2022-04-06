@@ -37,7 +37,7 @@ The competitors must conceive a model that relies only on the provided data for 
 
 ## Downloading the dataset
 
-The dataset can be found [here](https://www.kaggle.com/datasets/deepsportradar/basketball-instants-dataset) and can be downloaded and unzipped manually in the `basketball-instants-dataset/` folder of the project. To do it programmatically, you need the kaggle CLI:
+The dataset can be downloaded [here](https://www.kaggle.com/datasets/deepsportradar/basketball-instants-dataset) and unzipped manually in the `basketball-instants-dataset/` folder of the project. To do it programmatically, you need the kaggle CLI:
 
 ```bash
 pip install kaggle
@@ -89,8 +89,8 @@ The `deepsport` repository uses the split defined by `dataset_utilities.ds.insta
 2. Randomly samples 15% of the remaining images for the **validation-set**
 3. Uses the remaining images for the **training-set**.
 
-The **testing-set** should be used to rank your perfomence on the  evaluate your method on a public evaluation set.
-The **challenge-set** doesn’t contain any image from the three sets defined above. Therefore
+The **testing-set** should be used to evaluate your method, both on the public EvalAI leaderboard that provides the temporary ranking, and when communicating about your method.
+The **challenge-set** doesn’t contain any image from the three sets defined above. You are free to use them all to build the model that 
 
 ### Running the baseline
 ```bash
