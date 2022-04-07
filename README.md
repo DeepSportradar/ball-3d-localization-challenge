@@ -24,13 +24,13 @@ One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/
   - [Computing metrics](#computing-metrics)
 - [License](#license)
 
-This challenge tackles the estimation of ball size on basketball scenes. Using camera calibration information and knowledge of the real ball size, this estimation can be used to recover the ball 3d localization in the scene[^1].
+This challenge tackles the estimation of ball size on basketball scenes given oracle ball position. Using camera calibration information and knowledge of the real ball size, this estimation can be used to recover the ball 3d localization in the scene[^1].
 
 ## Challenge rules
 
 Please refer to the challenge webpage for complete rules, timelines and awards: [https://deepsportradar.github.io/challenge.html](https://deepsportradar.github.io/challenge.html).
 
-The goal of this challenge is to obtain the best estimation of ball size in pixels from thumbnails around true ball positions. The metric used will be the mean absolute error (MAE) between the prediction and the ground-truth.
+The goal of this challenge is to obtain the best estimation of ball size in pixels from true ball position given by an oracle. The metric used will be the mean absolute error (MAE) between the prediction and the ground-truth.
 Contestants will be evaluated on a **challenge-set** that will be provided later and for which labels will be kept secrets.
 
 The competitors must conceive a model that relies only on the provided data for training. In the case of a neural-network based model, initial weights may come from a well-established public methods pret-trained on public data. This must be clearly stated in the publication/report.
@@ -57,7 +57,7 @@ The `basketball-instants-dataset` consists in raw images captured by the Keemoti
 The public https://github.com/gabriel-vanzandycke/deepsport repository provides a baseline for this challenge.
 Follow its installation instructions and add the folder `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
 
-### Dataset preprocessing
+### Dataset pre-processing
 
 The basline uses a pre-processed dataset built from the `basketball-instants-dataset` with the following script:
 ```bash
@@ -67,7 +67,7 @@ python deepsport/scripts/prepare_ball_views_dataset.py --dataset-folder basketba
 ### Training the baseline
 
 With the dataset ready, you can train the baseline.
-The configuration file `configs/ballsize.py` defines a model and parameters to train it, as well as the necessary callbacks to compute the metrics. You can launch the model training by running:
+The configuration file `configs/ballsize.py` defines a model and the parameters to train it, as well as the necessary callbacks to compute the metrics. You can launch the model training by running:
 ```bash
 python -m experimentator configs/ballsize.py --epochs 101 --kwargs "eval_epochs=range(0,101,20)"
 ```
@@ -93,9 +93,12 @@ for ax, metric in zip(axes, ["loss", "MADE"]):
 
 ### Inferrence
 
-Lorem ipsum
+
 
 ## Participating with another codebase
+
+Participants are free to use their own codebase 
+
 
 ### Dataset splits
 
