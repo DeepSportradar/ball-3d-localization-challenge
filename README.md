@@ -14,11 +14,7 @@ One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/
 **Table of contents**
 - [Challenge rules](#challenge-rules)
 - [Downloading the dataset](#downloading-the-dataset)
-- [Using deepsport repository](#using-deepsport-repository)
-  - [Create the ball dataset](#create-the-ball-dataset)
-  - [Dataset splits](#dataset-splits)
-  - [Running the baseline](#running-the-baseline)
-  - [Test, metrics and submission](#test-metrics-and-submission)
+- [Running the baseline](#running-the-baseline)
 - [Participating with another codebase](#participating-with-another-codebase)
   - [Submission format](#submission-format)
   - [Computing metrics](#computing-metrics)
@@ -52,7 +48,7 @@ unzip -qo ./basketball-instants-dataset.zip -d basketball-instants-dataset
 
 The `basketball-instants-dataset` consists in raw images captured by the Keemotion system. For this challenge, we will only use thumbnails around the balls.
 
-## Using deepsport baseline
+## Running the baseline
 
 The public https://github.com/gabriel-vanzandycke/deepsport repository provides a baseline for this challenge.
 Follow its installation instructions and add the folder `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
@@ -93,7 +89,24 @@ for ax, metric in zip(axes, ["loss", "MADE"]):
 
 ### Inferrence
 
+You can run the trained model the following way:
+```python
+import os
+from matplotlib import pyplot as plt
+from tasks.ballsize import CropBallTransform
+from experimentator import build_experiment, find, collate_fn
+from mlworkflow import PickledDataset, TransformedDataset
 
+exp = build_experiment(os.path.join(os.environ['RESULTS_FOLDER'], "ballsize/latest/config.py"), robust=True)
+ds = PickledDataset(find("ball_views.pickle"))
+ds = TransformedDataset(ds, [CropBallTransform(exp.cfg["side_length"])])
+
+for keys, data in ds.batches(batch_size=1, collate_fn=collate_fn):
+    output = exp.predict(data)
+    plt.imshow(data["batch_input_image"][0])
+    plt.title("{:.2f}".format(output["predicted_diameter"][0]))
+    break
+```
 
 ## Participating with another codebase
 
@@ -102,7 +115,7 @@ Participants are free to use their own codebase
 
 ### Dataset splits
 
-The `deepsport` repository uses the split defined by [`DeepSportDatasetSplitter`](https://gitlab.com/deepsport/deepsport_utilities/-/blob/main/deepsport_utilities/ds/instants_dataset/dataset_splitters.py#L6) which
+The challenge uses the split defined by [`DeepSportDatasetSplitter`](https://gitlab.com/deepsport/deepsport_utilities/-/blob/main/deepsport_utilities/ds/instants_dataset/dataset_splitters.py#L6) which
 1. Uses images from `KS-FR-CAEN`, `KS-FR-LIMOGES` and `KS-FR-ROANNE` arenas for the **testing-set**.
 2. Randomly samples 15% of the remaining images for the **validation-set**
 3. Uses the remaining images for the **training-set**.
@@ -116,8 +129,6 @@ The **challenge-set** will be shared later, without the labels, and will be used
 ### Test, metrics and submission
 
 A script to generate the **testing-set** is provided in this repository:
-
-## Participating with another codebase
 
 ### Submission format
 ### Computing metrics
