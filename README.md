@@ -13,8 +13,6 @@ One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/
 - [Downloading the dataset](#downloading-the-dataset)
 - [Running the baseline](#running-the-baseline)
 - [Participating with another codebase](#participating-with-another-codebase)
-  - [Submission format](#submission-format)
-  - [Computing metrics](#computing-metrics)
 - [License](#license)
 
 This challenge tackles the estimation of ball size on basketball scenes given oracle ball position. Using camera calibration information and knowledge of the real ball size, this estimation can be used to recover the ball 3d localization in the scene[^1].
