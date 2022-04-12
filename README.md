@@ -11,6 +11,7 @@ One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/
 **Table of contents**
 - [Challenge rules](#challenge-rules)
 - [Downloading the dataset](#downloading-the-dataset)
+- [Dataset Split](#dataset-split)
 - [Running the baseline](#running-the-baseline)
 - [Participating with another codebase](#participating-with-another-codebase)
 - [License](#license)
@@ -42,6 +43,20 @@ unzip -qo ./basketball-instants-dataset.zip -d basketball-instants-dataset
 ```
 
 The `basketball-instants-dataset` consists in raw images captured by the Keemotion system. For this challenge, we will only use thumbnails around the balls.
+
+
+## Dataset splits
+
+The challenge uses the split defined by [`DeepSportDatasetSplitter`](https://gitlab.com/deepsport/deepsport_utilities/-/blob/main/deepsport_utilities/ds/instants_dataset/dataset_splitters.py#L6) which
+1. Uses images from `KS-FR-CAEN`, `KS-FR-LIMOGES` and `KS-FR-ROANNE` arenas for the **testing-set**.
+2. Randomly samples 15% of the remaining images for the **validation-set**
+3. Uses the remaining images for the **training-set**.
+
+The **testing-set** should be used to evaluate your model, both on the public EvalAI leaderboard that provides the temporary ranking, and when communicating about your method.
+
+The **challenge-set** will be shared later, without the labels, and will be used for the official ranking. You are free to use the three sets defined above to build the final model on which your method will be evaluated in the EvalAI submission.
+
+
 
 ## Running the baseline
 
@@ -110,21 +125,9 @@ This repository offers a script to generate a dataset of input ball images and t
 ```bash
 python tools/generate_dataset.pickle --dataset-folder basketball-instants-dataset --side-length 64
 ```
-The resulting file is an `mlworkflow.PickledDataset` of pairs (key, item) where keys are the item identifiers and items are a dictionary with:
-- image: a `numpy.ndarray` RGB image thumbnail centered on the ball.
-- size: a `float` of the ball size in pixels.
-
-## Dataset splits
-
-The challenge uses the split defined by [`DeepSportDatasetSplitter`](https://gitlab.com/deepsport/deepsport_utilities/-/blob/main/deepsport_utilities/ds/instants_dataset/dataset_splitters.py#L6) which
-1. Uses images from `KS-FR-CAEN`, `KS-FR-LIMOGES` and `KS-FR-ROANNE` arenas for the **testing-set**.
-2. Randomly samples 15% of the remaining images for the **validation-set**
-3. Uses the remaining images for the **training-set**.
-
-The **testing-set** should be used to evaluate your model, both on the public EvalAI leaderboard that provides the temporary ranking, and when communicating about your method.
-
-The **challenge-set** will be shared later, without the labels, and will be used for the official ranking. You are free to use the three sets defined above to build the final model on which your method will be evaluated in the EvalAI submission.
-
+The file created is an [`mlworkflow.PickledDataset`](https://github.com/ispgroupucl/mlworkflow/blob/master/README.md) of pairs (key, item) where keys are item identifiers and items are a dictionaries with:
+- `"image"`: a `numpy.ndarray` RGB image thumbnail centered on the ball.
+- `"size"`: a `float` of the ball size in pixels.
 
 
 ### Test, metrics and submission
