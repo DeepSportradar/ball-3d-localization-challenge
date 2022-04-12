@@ -110,7 +110,7 @@ This repository offers a script to generate a dataset of input ball images and t
 ```bash
 python tools/generate_dataset.pickle --dataset-folder basketball-instants-dataset --side-length 64
 ```
-The resulting file is an `mlworkflow.PickledDataset` of pairs (view_key, item) where view_key is the dataset item identifier and the item is a dictionary with keys:
+The resulting file is an `mlworkflow.PickledDataset` of pairs (key, item) where keys are the item identifiers and items are a dictionary with:
 - image: a `numpy.ndarray` RGB image thumbnail centered on the ball.
 - size: a `float` of the ball size in pixels.
 
