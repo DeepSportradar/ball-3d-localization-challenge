@@ -106,7 +106,7 @@ for keys, data in ds.batches(batch_size=1, collate_fn=collate_fn):
 ## Participating with another codebase
 
 Participants are free to use their own codebase.
-This repository offers a script to generate a dataset of ball images and target size in pixel, with image side length given in argument:
+This repository offers a script to generate a dataset of input ball images and target ball size in pixel, with image side length given in argument:
 ```bash
 python tools/generate_dataset.pickle --dataset-folder basketball-instants-dataset --side-length 64
 ```
