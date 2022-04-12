@@ -46,7 +46,7 @@ The `basketball-instants-dataset` consists in raw images captured by the Keemoti
 ## Running the baseline
 
 The public https://github.com/gabriel-vanzandycke/deepsport repository provides a baseline for this challenge.
-Follow its installation instructions and add the folder `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
+To use it, follow its installation instructions and add the folder `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
 
 ### Dataset pre-processing
 
@@ -105,10 +105,16 @@ for keys, data in ds.batches(batch_size=1, collate_fn=collate_fn):
 
 ## Participating with another codebase
 
-Participants are free to use their own codebase 
+Participants are free to use their own codebase.
+This repository offers a script to generate a dataset of ball images and target size in pixel, with image side length given in argument:
+```bash
+python tools/generate_dataset.pickle --dataset-folder basketball-instants-dataset --side-length 64
+```
+The resulting file is an `mlworkflow.PickledDataset` of pairs (view_key, item) where view_key is the dataset item identifier and the item is a dictionary with keys:
+- image: a `numpy.ndarray` RGB image thumbnail centered on the ball.
+- size: a `float` of the ball size in pixels.
 
-
-### Dataset splits
+## Dataset splits
 
 The challenge uses the split defined by [`DeepSportDatasetSplitter`](https://gitlab.com/deepsport/deepsport_utilities/-/blob/main/deepsport_utilities/ds/instants_dataset/dataset_splitters.py#L6) which
 1. Uses images from `KS-FR-CAEN`, `KS-FR-LIMOGES` and `KS-FR-ROANNE` arenas for the **testing-set**.
