@@ -137,7 +137,7 @@ The submission file can be generated using `tools.utils.PredictionsDumper` from 
 with PredictionsDumper("predictions.json") as pd:
     for view_key in dataset.keys:
         prediction = compute(dataset.query_item(view_key))
-        pd(view_key, prediction)
+        pd(view_key, float(prediction))
 ```
 
 
