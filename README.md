@@ -130,16 +130,15 @@ The file created is an [`mlworkflow.PickledDataset`](https://github.com/ispgroup
 - `"size"`: a `float` of the ball size in pixels.
 
 
-### Test, metrics and submission
+## Submissions
 
-A script to generate the **testing-set** is provided in this repository:
-
-### Submission format
-### Computing metrics
-
-## License
-
-
+The submission file can be generated using `tools.utils.PredictionsDumper` from this repository.
+```python
+with PredictionsDumper("predictions.json") as pd:
+    for view_key in dataset.keys:
+        prediction = compute(dataset.query_item(view_key))
+        pd(view_key, prediction)
+```
 
 
 ## Challenge
