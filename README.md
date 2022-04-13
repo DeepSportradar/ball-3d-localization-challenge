@@ -11,7 +11,7 @@ One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/
 **Table of contents**
 - [Challenge rules](#challenge-rules)
 - [Downloading the dataset](#downloading-the-dataset)
-- [Dataset Split](#dataset-split)
+- [Dataset Splits](#dataset-splits)
 - [Running the baseline](#running-the-baseline)
 - [Participating with another codebase](#participating-with-another-codebase)
 - [License](#license)
@@ -140,9 +140,6 @@ with PredictionsDumper("predictions.json") as pd:
         pd(view_key, float(prediction))
 ```
 
-
-## Challenge
-Given a dataset of ball thumbnails and ground-truth ball diameter in pixels, you are asked to create a model that predicts ball diameter on unseen images of balls.
 
 
 [^1]: [Ball 3D localization from a single calibrated image](https://arxiv.org/abs/2204.00003)
