@@ -11,10 +11,9 @@ One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/
 **Table of contents**
 - [Challenge rules](#challenge-rules)
 - [Downloading the dataset](#downloading-the-dataset)
+- [Dataset Splits](#dataset-splits)
 - [Running the baseline](#running-the-baseline)
 - [Participating with another codebase](#participating-with-another-codebase)
-  - [Submission format](#submission-format)
-  - [Computing metrics](#computing-metrics)
 - [License](#license)
 
 This challenge tackles the estimation of ball size on basketball scenes given oracle ball position. Using camera calibration information and knowledge of the real ball size, this estimation can be used to recover the ball 3d localization in the scene[^1].
@@ -45,10 +44,24 @@ unzip -qo ./basketball-instants-dataset.zip -d basketball-instants-dataset
 
 The `basketball-instants-dataset` consists in raw images captured by the Keemotion system. For this challenge, we will only use thumbnails around the balls.
 
+
+## Dataset splits
+
+The challenge uses the split defined by [`DeepSportDatasetSplitter`](https://gitlab.com/deepsport/deepsport_utilities/-/blob/main/deepsport_utilities/ds/instants_dataset/dataset_splitters.py#L6) which
+1. Uses images from `KS-FR-CAEN`, `KS-FR-LIMOGES` and `KS-FR-ROANNE` arenas for the **testing-set**.
+2. Randomly samples 15% of the remaining images for the **validation-set**
+3. Uses the remaining images for the **training-set**.
+
+The **testing-set** should be used to evaluate your model, both on the public EvalAI leaderboard that provides the temporary ranking, and when communicating about your method.
+
+The **challenge-set** will be shared later, without the labels, and will be used for the official ranking. You are free to use the three sets defined above to build the final model on which your method will be evaluated in the EvalAI submission.
+
+
+
 ## Running the baseline
 
 The public https://github.com/gabriel-vanzandycke/deepsport repository provides a baseline for this challenge.
-Follow its installation instructions and add the folder `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
+To use it, follow its installation instructions and add the folder `basketball-instants-dataset` full path to `DATA_PATH` in your `.env` file.
 
 ### Dataset pre-processing
 
@@ -107,36 +120,26 @@ for keys, data in ds.batches(batch_size=1, collate_fn=collate_fn):
 
 ## Participating with another codebase
 
-Participants are free to use their own codebase 
+Participants are free to use their own codebase.
+This repository offers a script to generate a dataset of input ball images and target ball size in pixel, with image side length given in argument:
+```bash
+python tools/generate_dataset.pickle --dataset-folder basketball-instants-dataset --side-length 64
+```
+The file created is an [`mlworkflow.PickledDataset`](https://github.com/ispgroupucl/mlworkflow/blob/master/README.md) of pairs (key, item) where keys are item identifiers and items are a dictionaries with:
+- `"image"`: a `numpy.ndarray` RGB image thumbnail centered on the ball.
+- `"size"`: a `float` of the ball size in pixels.
 
 
-### Dataset splits
+## Submissions
 
-The challenge uses the split defined by [`DeepSportDatasetSplitter`](https://gitlab.com/deepsport/deepsport_utilities/-/blob/main/deepsport_utilities/ds/instants_dataset/dataset_splitters.py#L6) which
-1. Uses images from `KS-FR-CAEN`, `KS-FR-LIMOGES` and `KS-FR-ROANNE` arenas for the **testing-set**.
-2. Randomly samples 15% of the remaining images for the **validation-set**
-3. Uses the remaining images for the **training-set**.
+The submission file can be generated using `tools.utils.PredictionsDumper` from this repository.
+```python
+with PredictionsDumper("predictions.json") as pd:
+    for view_key in dataset.keys:
+        prediction = compute(dataset.query_item(view_key))
+        pd(view_key, float(prediction))
+```
 
-The **testing-set** should be used to evaluate your model, both on the public EvalAI leaderboard that provides the temporary ranking, and when communicating about your method.
-
-The **challenge-set** will be shared later, without the labels, and will be used for the official ranking. You are free to use the three sets defined above to build the final model on which your method will be evaluated in the EvalAI submission.
-
-
-
-### Test, metrics and submission
-
-A script to generate the **testing-set** is provided in this repository:
-
-### Submission format
-### Computing metrics
-
-## License
-
-
-
-
-## Challenge
-Given a dataset of ball thumbnails and ground-truth ball diameter in pixels, you are asked to create a model that predicts ball diameter on unseen images of balls.
 
 
 [^1]: [Ball 3D localization from a single calibrated image](https://arxiv.org/abs/2204.00003)
