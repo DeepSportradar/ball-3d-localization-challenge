@@ -8,6 +8,8 @@
 
 One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/mmsports2022/index.html) challenges. An opportunity to publish or win a $1000,00 prize by competing on [EvalAI](https://eval.ai/web/challenges/challenge-page/1688/overview). See [this page](http://mmsports.multimedia-computing.de/mmsports2022/challenge.html) for more details.
 
+<img src=assets/banner.png width=50%/>
+
 **Table of contents**
 - [Challenge rules](#challenge-rules)
 - [Downloading the dataset](#downloading-the-dataset)
