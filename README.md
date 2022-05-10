@@ -8,12 +8,15 @@
 
 One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/mmsports2022/index.html) challenges. An opportunity to publish or win a $1000,00 prize by competing on [EvalAI](https://eval.ai/web/challenges/challenge-page/1688/overview). See [this page](http://mmsports.multimedia-computing.de/mmsports2022/challenge.html) for more details.
 
+<img src=assets/banner.png width=50%/>
+
 **Table of contents**
 - [Challenge rules](#challenge-rules)
 - [Downloading the dataset](#downloading-the-dataset)
 - [Dataset Splits](#dataset-splits)
 - [Running the baseline](#running-the-baseline)
 - [Participating with another codebase](#participating-with-another-codebase)
+- [Metrics](#metrics)
 - [License](#license)
 
 This challenge tackles the estimation of ball size on basketball scenes given oracle ball position. Using camera calibration information and knowledge of the real ball size, this estimation can be used to recover the ball 3d localization in the scene[^1].
@@ -129,6 +132,9 @@ The file created is an [`mlworkflow.PickledDataset`](https://github.com/ispgroup
 - `"image"`: a `numpy.ndarray` RGB image thumbnail centered on the ball.
 - `"size"`: a `float` of the ball size in pixels.
 
+## Metrics
+
+The goal of this challenge is to obtain the best estimation of ball size in pixels from true ball position given by an oracle. The metric used will be the mean absolute diameter error (MADE) between the prediction and the ground-truth. In addition, the mean absolute projection error (MAPE) and the mean absolute relative error (MARE), descsribed in[^1] are used for information.
 
 ## Submissions
 
