@@ -124,13 +124,15 @@ for keys, data in ds.batches(batch_size=1, collate_fn=collate_fn):
 ## Participating with another codebase
 
 Participants are free to use their own codebase.
-This repository offers a script to generate a dataset of input ball images and target ball size in pixel, with image side length given in argument:
+This repository offers a script to generate a dataset of input ball images and target ball size in pixel, with image side length given in argument. Additionally, the official subsets can be generated with the `--subset` option:
 ```bash
-python tools/generate_dataset.pickle --dataset-folder basketball-instants-dataset --side-length 64
+python tools/generate_dataset.pickle --dataset-folder basketball-instants-dataset --side-length 64 --subset trainval
 ```
 The file created is an [`mlworkflow.PickledDataset`](https://github.com/ispgroupucl/mlworkflow/blob/master/README.md) of pairs (key, item) where keys are item identifiers and items are a dictionaries with:
 - `"image"`: a `numpy.ndarray` RGB image thumbnail centered on the ball.
 - `"size"`: a `float` of the ball size in pixels.
+
+If `--subset challenge` option is given, the challenge evaluation in which ball size is always `numpy.nan` will be used.
 
 ## Metrics
 
