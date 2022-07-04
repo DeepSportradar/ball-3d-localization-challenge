@@ -35,7 +35,7 @@ dataset_config = {
 }
 
 # Import dataset
-filename = "basketball-instants-dataset.json" if args.subset != 'challenge' else "mmsports-instants-dataset-challenge-set_dataset.json'"
+filename = "basketball-instants-dataset.json" if args.subset != 'challenge' else "mmsports-instants-dataset-challenge-set_dataset.json"
 database_file = os.path.join(args.dataset_folder, filename)
 ds = import_dataset(InstantsDataset, database_file, **dataset_config)
 

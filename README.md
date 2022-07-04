@@ -57,7 +57,7 @@ The challenge uses the split defined by [`DeepSportDatasetSplitter`](https://git
 
 The **testing-set** should be used to evaluate your model, both on the public EvalAI leaderboard that provides the temporary ranking, and when communicating about your method.
 
-The **challenge-set** will be shared later, without the labels, and will be used for the official ranking. You are free to use the three sets defined above to build the final model on which your method will be evaluated in the EvalAI submission.
+The **challenge-set** will be used for the official ranking, and you are free to use the three sets defined above to build the final model on which your method will be evaluated in the EvalAI submission. The challenge set is available here: https://arena-data.keemotion.com/tmp/gva/mmsports_challenge_set_data.zip. Images in which the ball is not visible are flagged as such in our ground-truth and won't be used to compute the metric.
 
 
 
