@@ -14,7 +14,9 @@ class CropBallViewTransform(Transform):
         sl = self.side_length
         x_slice = slice((w-sl)//2, (w-sl)//2 + sl, None)
         y_slice = slice((h-sl)//2, (h-sl)//2 + sl, None)
-        return {"input_image": view.image[y_slice, x_slice]}
+        return {
+            "input_image": view.image[y_slice, x_slice]
+        }
 
 class PredictionsDumper():
     def __init__(self, filename):

@@ -13,12 +13,14 @@ from deepsport_utilities.ds.instants_dataset.views_transforms import AddBallAnno
 from deepsport_utilities.ds.instants_dataset.dataset_splitters import DeepSportDatasetSplitter
 
 
-parser = argparse.ArgumentParser(description=""" This script enables participants to create their own dataset for the challenge
+parser = argparse.ArgumentParser(description="""
+    This script enables participants to create their own dataset for the challenge.
     The dataset is saved as an `mlworkflow.PickledDataset` of pairs (view_key, item)
-    where view_key is the dataset key and item is a dictionary with fields:
+    where view_key is the dataset key (a tuple) and item is a dictionary with fields:
         - 'image': a `numpy.ndarray` RGB image thumbnail centered on the ball. The
             thumbnail size is given in arguments.
         - 'size': a `float` of the ball size in pixels.
+    Only balls flagged as visible are kept.
 """)
 parser.add_argument("--dataset-folder", required=True, help="Basketball Instants Dataset folder")
 parser.add_argument("--output-folder", default=None, help="Folder in which specific dataset will be created. Defaults to `dataset_folder` given in arguments.")
@@ -51,7 +53,7 @@ if args.subset != 'challenge':
 ds = ViewsDataset(ds, BuildBallViews(margin=args.side_length, margin_in_pixels=True, padding=args.side_length))
 
 
-# Transform Views objects into dictionarys with only image and ball size in pixels
+# Transform Views objects into dictionaries with only image and ball size in pixels
 ds = TransformedDataset(ds, [
     DataExtractorTransform(    # Transforms python object in dictionary
         AddImageFactory(),     #    Adds image to the dictionary
@@ -59,6 +61,8 @@ ds = TransformedDataset(ds, [
     )
 ])
 
+# Ignore balls flagged as not visible
+ds = FilteredDataset(ds, lambda k,v: v['ball_size'] != np.nan)
 
 # Write dataset as an mlworkflow.PickledDataset
 output_folder = args.output_folder or args.dataset_folder
