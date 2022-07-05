@@ -68,14 +68,14 @@ To use it, follow its installation instructions and add the folder `basketball-i
 
 ### Dataset pre-processing
 
-The basline uses a pre-processed dataset built from the `basketball-instants-dataset` with the following script:
+The basline uses `ball_views.pickle`, a pre-processed dataset built from the full `basketball-instants-dataset` with the following script:
 ```bash
 python deepsport/scripts/prepare_ball_views_dataset.py --dataset-folder basketball-instants-dataset
 ```
 
 ### Training the baseline
 
-With the dataset ready, you can train the baseline.
+With the `ball_views.pickle` dataset ready and located in one of the paths of your `DATA_PATH`, you can train the baseline.
 The configuration file `configs/ballsize.py` defines a model and the parameters to train it, as well as the necessary callbacks to compute the metrics. You can launch the model training by running:
 ```bash
 python -m experimentator configs/ballsize.py --epochs 101 --kwargs "eval_epochs=range(0,101,20)"
