@@ -17,6 +17,7 @@ One of the [ACM MMSports 2022 Workshop](http://mmsports.multimedia-computing.de/
 - [Running the baseline](#running-the-baseline)
 - [Participating with another codebase](#participating-with-another-codebase)
 - [Metrics](#metrics)
+- [Submissions](#submissions)
 - [License](#license)
 
 This challenge tackles the estimation of ball size on basketball scenes given oracle ball position. Using camera calibration information and knowledge of the real ball size, this estimation can be used to recover the ball 3d localization in the scene[^1].
@@ -57,7 +58,9 @@ The challenge uses the split defined by [`DeepSportDatasetSplitter`](https://git
 
 The **testing-set** should be used to evaluate your model, both on the **public** EvalAI leaderboard that provides the temporary ranking, and when communicating about your method.
 
-The **challenge-set** should be used to submit the predictions of your model on the **private** EvalAI leaderboard that will be used for the official ranking. You are free to use the three sets defined above to build the final model on which your method will be evaluated, but the challenge set can only be used for computing the predictions of your model. The challenge set is available here: https://arena-data.keemotion.com/tmp/gva/ball_dataset_challenge.pickle. Images in which the ball is not visible were removed from the challenge set.
+The **challenge-set** should be used to submit the predictions of your model on the **private** EvalAI leaderboard that will be used for the official ranking. You are free to use the three sets defined above to build the final model on which your method will be evaluated, but the challenge set can only be used for computing the predictions of your model. 
+
+The challenge set is available here: https://arena-data.keemotion.com/tmp/gva/ball_dataset_challenge.pickle.
 
 
 
