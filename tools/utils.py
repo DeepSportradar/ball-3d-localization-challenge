@@ -1,29 +1,30 @@
+import json
+
 from deepsport_utilities.transforms import Transform
 from deepsport_utilities.ds.instants_dataset.views_dataset import ViewKey, View
 
 
-class CropBallViewTransform(Transform):
-    """ Transforms views centered on ball by cropping a square thumbnail of the ball.
+class CropCenterTransform(Transform):
+    """ Crops an image from its center with a given side length
         Arguments:
-            - side_length: thumbnail side length in pixels
+            - side_length: crop side length in pixels
     """
     def __init__(self, side_length: int):
         self.side_length = side_length
-    def __call__(self, view_key: ViewKey, view: View):
-        w, h, _ = view.image.shape
+    def __call__(self, view_key, item):
+        w, h, _ = item['input_image'].shape
         sl = self.side_length
         x_slice = slice((w-sl)//2, (w-sl)//2 + sl, None)
         y_slice = slice((h-sl)//2, (h-sl)//2 + sl, None)
-        return {
-            "input_image": view.image[y_slice, x_slice]
-        }
+        item['input_image'] = item['input_image'][y_slice, x_slice]
+        return item
 
 class PredictionsDumper():
     def __init__(self, filename):
         self.predictions = []
         self.filename = filename
     def __enter__(self):
-        pass
+        return self
     def __call__(self, view_key, prediction: float):
         self.predictions.append({
             "arena_label": view_key.arena_label,
@@ -33,6 +34,6 @@ class PredictionsDumper():
             "index": view_key.index,
             "prediction": prediction
         })
-    def __exit__(self):
-        json.dump(self.predictions, open(filename, "w"))
-        print(f"{filename} successfully written")
+    def __exit__(self ,type, value, traceback):
+        json.dump(self.predictions, open(self.filename, "w"))
+        print(f"{self.filename} successfully written")
