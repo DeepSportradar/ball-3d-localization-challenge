@@ -80,12 +80,12 @@ The configuration file `configs/ballsize.py` defines a model and the parameters 
 ```bash
 python -m experimentator configs/ballsize.py --epochs 101 --kwargs "eval_epochs=range(0,101,20)"
 ```
-Alternatively, you can use and adapt the provided notebook (notebooks/run_ballsize_experiment.ipynb).
+Alternatively, you can use and adapt the provided notebook: [notebooks/run_ballsize_experiment.ipynb](https://github.com/gabriel-vanzandycke/deepsport/blob/main/notebooks/run_ballsize_experiment.ipynb).
 
 
 ### Run inference with the baseline
 
-This repository provides a notebook to vizualize the baseline results and compute predictions on the testing and challenge sets (load_baseline.ipynb).
+This repository provides a notebook to vizualize the baseline results and compute predictions on the testing and challenge sets: [load_baseline.ipynb](load_baseline.ipynb).
 
 
 
