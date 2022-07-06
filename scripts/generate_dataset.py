@@ -3,6 +3,7 @@ from importlib_resources import files
 import json
 import os
 
+import numpy as np
 from tqdm.auto import tqdm
 
 from mlworkflow import PickledDataset, TransformedDataset, FilteredDataset
@@ -14,18 +15,18 @@ from deepsport_utilities.ds.instants_dataset.dataset_splitters import DeepSportD
 
 
 parser = argparse.ArgumentParser(description="""
-    This script enables participants to create their own dataset for the challenge.
+    This script enables participants to create their own dataset for the competition.
     The dataset is saved as an `mlworkflow.PickledDataset` of pairs (view_key, item)
     where view_key is the dataset key (a tuple) and item is a dictionary with fields:
-        - 'image': a `numpy.ndarray` RGB image thumbnail centered on the ball. The
-            thumbnail size is given in arguments.
-        - 'size': a `float` of the ball size in pixels.
+        - 'input_image': a `numpy.ndarray` RGB image thumbnail centered on the ball.
+            The thumbnail size is given in arguments.
+        - 'ball_size': a `float` of the ball size in pixels.
     Only balls flagged as visible are kept.
 """)
 parser.add_argument("--dataset-folder", required=True, help="Basketball Instants Dataset folder")
 parser.add_argument("--output-folder", default=None, help="Folder in which specific dataset will be created. Defaults to `dataset_folder` given in arguments.")
 parser.add_argument("--side-length", required=True, type=int, help="Ball thumbnail side length (integer)")
-parser.add_argument("--subset", default='trainvaltest', choices=['train', 'val', 'test', 'trainval', 'trainvaltest', 'challenge'], help="Dataset split")
+parser.add_argument("--subset", default='trainvaltest', choices=['train', 'val', 'test', 'trainval', 'trainvaltest'], help="Dataset split")
 args = parser.parse_args()
 
 # The `dataset_config` is used to create each dataset item
@@ -35,18 +36,16 @@ dataset_config = {
 }
 
 # Import dataset
-filename = "basketball-instants-dataset.json" if args.subset != 'challenge' else "mmsports-instants-dataset-challenge-set_dataset.json"
-database_file = os.path.join(args.dataset_folder, filename)
+database_file = os.path.join(args.dataset_folder, "basketball-instants-dataset.json")
 ds = import_dataset(InstantsDataset, database_file, **dataset_config)
 
 
 # Extract subset keys
-if args.subset != 'challenge':
-    keys = []
-    for subset_name, subset_keys in zip(['train', 'val', 'test'], DeepSportDatasetSplitter().split_keys(ds.keys.all())):
-        if subset_name in args.subset:
-            keys += subset_keys
-    ds = FilteredDataset(ds, predicate=lambda k,v: k in keys)
+keys = []
+for subset_name, subset_keys in zip(['train', 'val', 'test'], DeepSportDatasetSplitter().split_keys(ds.keys.all())):
+    if subset_name in args.subset:
+        keys += subset_keys
+ds = FilteredDataset(ds, predicate=lambda k,v: k in keys)
 
 
 # Build a dataset of balls centered in the image with a margin of 'side_length' pixels around the ball
@@ -62,7 +61,7 @@ ds = TransformedDataset(ds, [
 ])
 
 # Ignore balls flagged as not visible
-ds = FilteredDataset(ds, lambda k,v: v['ball_size'] != np.nan)
+ds = FilteredDataset(ds, predicate=lambda k,v: bool(v['ball_size'] != np.nan))
 
 # Write dataset as an mlworkflow.PickledDataset
 output_folder = args.output_folder or args.dataset_folder
