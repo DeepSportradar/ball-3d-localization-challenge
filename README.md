@@ -55,9 +55,9 @@ The challenge uses the split defined by [`DeepSportDatasetSplitter`](https://git
 2. Randomly samples 15% of the remaining images for the **validation-set**
 3. Uses the remaining images for the **training-set**.
 
-The **testing-set** should be used to evaluate your model, both on the public EvalAI leaderboard that provides the temporary ranking, and when communicating about your method.
+The **testing-set** should be used to evaluate your model, both on the **public** EvalAI leaderboard that provides the temporary ranking, and when communicating about your method.
 
-The **challenge-set** will be used for the official ranking, and you are free to use the three sets defined above to build the final model on which your method will be evaluated in the EvalAI submission. The challenge set is available here: https://arena-data.keemotion.com/tmp/gva/mmsports_challenge_set_data.zip. Images in which the ball is not visible are flagged as such in our ground-truth and won't be used to compute the metric.
+The **challenge-set** should be used to submit the predictions of your model on the **private** EvalAI leaderboard that will be used for the official ranking. You are free to use the three sets defined above to build the final model on which your method will be evaluated, but the challenge set can only be used for computing the predictions of your model. The challenge set is available here: https://arena-data.keemotion.com/tmp/gva/ball_dataset_challenge.pickle. Images in which the ball is not visible were removed from the challenge set.
 
 
 
@@ -80,59 +80,34 @@ The configuration file `configs/ballsize.py` defines a model and the parameters 
 ```bash
 python -m experimentator configs/ballsize.py --epochs 101 --kwargs "eval_epochs=range(0,101,20)"
 ```
+Alternatively, you can use and adapt the provided notebook (notebooks/run_ballsize_experiment.ipynb).
 
-You can vizualize the training process the following way:
 
-```python
-import dotenv
-dotenv.load_dotenv()
-import numpy as np
-from matplotlib import pyplot as plt
-from experimentator import DataCollector
-dc = DataCollector("{os.environ['RESULTS_FOLDER']}/ballsize/latest/history.dcp")
-fig, axes = plt.subplots(2,1)
-for ax, metric in zip(axes, ["loss", "MADE"]):
-    for subset in ["training", "validation"]:
-        label = f"{subset}_{metric}"
-        l = np.array(dc[label, :])
-        w = np.where(l)[0]
-        ax.plot(w, l[w], label=label)
-    ax.legend()
-```
+### Run inference with the baseline
 
-### Inferrence
+This repository provides a notebook to vizualize the baseline results and compute predictions on the testing and challenge sets (load_baseline.ipynb).
 
-You can run the trained model the following way:
-```python
-import os
-from matplotlib import pyplot as plt
-from tasks.ballsize import CropBallTransform
-from experimentator import build_experiment, find, collate_fn
-from mlworkflow import PickledDataset, TransformedDataset
 
-exp = build_experiment(os.path.join(os.environ['RESULTS_FOLDER'], "ballsize/latest/config.py"), robust=True)
-ds = PickledDataset(find("ball_views.pickle"))
-ds = TransformedDataset(ds, [CropBallTransform(exp.cfg["side_length"])])
-
-for keys, data in ds.batches(batch_size=1, collate_fn=collate_fn):
-    output = exp.predict(data)
-    plt.imshow(data["batch_input_image"][0])
-    plt.title("{:.2f}".format(output["predicted_diameter"][0]))
-    break
-```
 
 ## Participating with another codebase
 
 Participants are free to use their own codebase.
-This repository offers a script to generate a dataset of input ball images and target ball size in pixel, with image side length given in argument. Additionally, the official subsets can be generated with the `--subset` option:
+This repository offers a script to generate a dataset of input ball images and target ball size in pixel, with image side length given in argument. The official subsets can be generated with the `--subset` option:
 ```bash
-python tools/generate_dataset.pickle --dataset-folder basketball-instants-dataset --side-length 64 --subset trainval
+python scripts/generate_dataset.pickle --dataset-folder basketball-instants-dataset --side-length 224 --subset trainval
+python scripts/generate_dataset.pickle --dataset-folder basketball-instants-dataset --side-length 224 --subset test
 ```
-The file created is an [`mlworkflow.PickledDataset`](https://github.com/ispgroupucl/mlworkflow/blob/master/README.md) of pairs (key, item) where keys are item identifiers and items are a dictionaries with:
-- `"image"`: a `numpy.ndarray` RGB image thumbnail centered on the ball.
-- `"size"`: a `float` of the ball size in pixels.
+The files created are [`mlworkflow.PickledDataset`](https://github.com/ispgroupucl/mlworkflow/blob/master/README.md)s of pairs (key, item) where items are dictionaries with:
+- `"input_image"`: a `numpy.ndarray` RGB image thumbnail centered on the ball.
+- `"ball_size"`: a `float` of the ball size in pixels.
 
-If `--subset challenge` option is given, the challenge evaluation in which ball size is always `numpy.nan` will be used.
+This repository also implements a transformation that crops the dataset items with a given side length:
+```python
+from mlworkflow import PickledDataset, TransformedDataset
+from tools.utils import CropCenterTransform
+ds = PickledDataset("ball_dataset_trainval.pickle")
+ds = TransformedDataset(ds, [CropCenterTransform(side_length=64)])
+```
 
 ## Metrics
 
