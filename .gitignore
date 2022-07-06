@@ -1,3 +1,7 @@
 __pycache__
 .env
 .ipynb_checkpoints
+
+
+challenge_set_predictions.json
+testing_set_predictions.json
