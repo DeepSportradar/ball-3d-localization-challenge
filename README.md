@@ -3,6 +3,8 @@
 [![Win $1,000.00](https://badgen.net/badge/win/%241%2C000.00/yellow)](http://mmsports.multimedia-computing.de/mmsports2022/challenge.html)
 [![Kaggle Dataset](https://badgen.net/badge/kaggle/dataset/blue)](https://www.kaggle.com/datasets/deepsportradar/basketball-instants-dataset)
 
+> **Note**: DeepSportRadar-**v2** challenges will come back next year (2023), stay tuned on our [Discord channel](https://discord.gg/JvMQgMkpkm)!
+
 
 # DeepSportRadar Ball 3D localization challenge
 
@@ -126,6 +128,21 @@ with PredictionsDumper("predictions.json") as pd:
         pd(view_key, float(prediction))
 ```
 
+## Citation
 
+If you use any DeepSportradar dataset in your research or wish to refer to the baseline results and discussion published in [our paper](https://arxiv.org/abs/2208.08190), please use the following BibTeX entry:
+
+    @inproceedings{
+        Van_Zandycke_2022,
+        author = {Gabriel {Van Zandycke} and Vladimir Somers and Maxime Istasse and Carlo Del Don and Davide Zambrano},
+	    title = {{DeepSportradar}-v1: Computer Vision Dataset for Sports Understanding with High Quality Annotations},
+	    booktitle = {Proceedings of the 5th International {ACM} Workshop on Multimedia Content Analysis in Sports},
+	    publisher = {{ACM}},
+        year = 2022,
+	    month = {oct},
+        doi = {10.1145/3552437.3555699},
+        url = {https://doi.org/10.1145%2F3552437.3555699}
+    }
+    
 
 [^1]: [Ball 3D localization from a single calibrated image](https://arxiv.org/abs/2204.00003)
